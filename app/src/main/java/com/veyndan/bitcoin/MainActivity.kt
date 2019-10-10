@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         sparkView.setScrubListener {
             // When no longer scrubbing, null is passed
             if (it != null) {
-                if (information.currentView.id != R.id.scrubInformation) {
+                if (!scrubInformation.isShown) {
                     information.showNext()
                 }
                 val datapoint = it as Datapoint
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                     .format(Date(datapoint.x.seconds.toLongMilliseconds()))
                 scrubTime.text = date
             } else {
-                if (information.currentView.id != R.id.titleInformation) {
+                if (!chartTitle.isShown) {
                     information.showNext()
                 }
             }
