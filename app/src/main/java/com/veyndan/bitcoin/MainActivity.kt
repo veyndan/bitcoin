@@ -2,7 +2,6 @@ package com.veyndan.bitcoin
 
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.ConfigurationCompat
 import com.squareup.moshi.FromJson
@@ -63,9 +62,9 @@ class MainActivity : AppCompatActivity() {
         sparkView.adapter = bitcoinSparkAdapter
 
         val chipIdToTimespan = mapOf(
-            R.id.timespan30Days to "30days",
-            R.id.timespan60Days to "60days",
-            R.id.timespan180Days to "180days",
+            R.id.timespan1Month to "30days",
+            R.id.timespan2Months to "60days",
+            R.id.timespan6Months to "180days",
             R.id.timespan1Year to "1year",
             R.id.timespan2Years to "2years",
             R.id.timespanAll to "all"

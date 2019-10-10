@@ -50,7 +50,7 @@
 
     <HorizontalScrollView
         android:id="@+id/timespansScrollingContainer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:scrollbars="none"
@@ -72,21 +72,21 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/timespan30Days"
+                    android:id="@+id/timespan1Month"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/timespan_30_days" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/timespan60Days"
+                    android:id="@+id/timespan2Months"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/timespan_60_days" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/timespan180Days"
+                    android:id="@+id/timespan6Months"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
