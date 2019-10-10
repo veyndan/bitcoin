@@ -1,9 +1,20 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textAppearance">@style/Chip.Choice.TextAppearance</item>
+        <item name="android:textColor">@color/chip_choice</item>
+        <item name="chipBackgroundColor">@android:color/transparent</item>
+        <item name="chipEndPadding">8dp</item>
+        <item name="chipStartPadding">8dp</item>
+    </style>
+
+    <style name="Chip.Choice.TextAppearance" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

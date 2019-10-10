@@ -6,5 +6,5 @@
     <string name="timespan_180_days">6M</string>
     <string name="timespan_1_year">1Y</string>
     <string name="timespan_2_years">2Y</string>
-    <string name="timespan_all">All</string>
+    <string name="timespan_all">ALL</string>
 </resources>
