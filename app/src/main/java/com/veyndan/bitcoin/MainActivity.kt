@@ -77,13 +77,18 @@ class MainActivity : AppCompatActivity() {
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { response ->
-                bitcoinSparkAdapter.datapoints = response.body()!!.values
+                val body = response.body()!!
+                bitcoinSparkAdapter.datapoints = body.values
                 bitcoinSparkAdapter.notifyDataSetChanged()
+                chartTitle.text = body.name
             }
 
         sparkView.setScrubListener {
             // When no longer scrubbing, null is passed
             if (it != null) {
+                if (information.currentView.id != R.id.scrubInformation) {
+                    information.showNext()
+                }
                 val datapoint = it as Datapoint
                 val primaryLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
                 val format = NumberFormat.getCurrencyInstance(primaryLocale).apply {
@@ -95,6 +100,10 @@ class MainActivity : AppCompatActivity() {
                 val date = DateFormat.getDateFormat(applicationContext)
                     .format(Date(datapoint.x.seconds.toLongMilliseconds()))
                 scrubTime.text = date
+            } else {
+                if (information.currentView.id != R.id.titleInformation) {
+                    information.showNext()
+                }
             }
         }
 
