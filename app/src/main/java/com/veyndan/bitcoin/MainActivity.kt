@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.ConfigurationCompat
+import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.veyndan.bitcoin.data.BitcoinChartService
 import com.veyndan.bitcoin.data.Datapoint
-import com.veyndan.bitcoin.rxbinding.checkedChanges
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -92,10 +92,13 @@ class MainActivity : AppCompatActivity() {
                 val price = format.format(datapoint.y.setScale(2, RoundingMode.HALF_UP))
                 scrubValue.text = price
 
-                val date = DateFormat.getDateFormat(applicationContext).format(Date(datapoint.x.seconds.toLongMilliseconds()))
+                val date = DateFormat.getDateFormat(applicationContext)
+                    .format(Date(datapoint.x.seconds.toLongMilliseconds()))
                 scrubTime.text = date
             }
         }
+
+        timespan1Year.isChecked = true
     }
 
     override fun onDestroy() {
