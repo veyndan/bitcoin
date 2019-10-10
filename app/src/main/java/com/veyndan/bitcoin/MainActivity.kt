@@ -1,9 +1,16 @@
 package com.veyndan.bitcoin
 
 import android.os.Bundle
-import androidx.annotation.IdRes
+import android.text.format.DateFormat
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.ConfigurationCompat
+import com.squareup.moshi.FromJson
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.ToJson
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.veyndan.bitcoin.data.BitcoinChartService
+import com.veyndan.bitcoin.data.Datapoint
 import com.veyndan.bitcoin.rxbinding.checkedChanges
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -14,6 +21,21 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.NumberFormat
+import java.util.*
+import kotlin.time.seconds
+
+
+object BigDecimalAdapter {
+
+    @FromJson
+    fun fromJson(string: String) = BigDecimal(string)
+
+    @ToJson
+    fun toJson(value: BigDecimal) = value.toString()
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,10 +45,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val moshi = Moshi.Builder()
+            .add(BigDecimalAdapter)
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.blockchain.info/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val bitcoinChartService = retrofit.create<BitcoinChartService>()
@@ -55,7 +82,21 @@ class MainActivity : AppCompatActivity() {
                 bitcoinSparkAdapter.notifyDataSetChanged()
             }
 
-        timespans.check(R.id.timespan1Year)
+        sparkView.setScrubListener {
+            // When no longer scrubbing, null is passed
+            if (it != null) {
+                val datapoint = it as Datapoint
+                val primaryLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
+                val format = NumberFormat.getCurrencyInstance(primaryLocale).apply {
+                    currency = Currency.getInstance("USD")
+                }
+                val price = format.format(datapoint.y.setScale(2, RoundingMode.HALF_UP))
+                scrubValue.text = price
+
+                val date = DateFormat.getDateFormat(applicationContext).format(Date(datapoint.x.seconds.toLongMilliseconds()))
+                scrubTime.text = date
+            }
+        }
     }
 
     override fun onDestroy() {

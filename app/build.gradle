@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kotlinOptions {
+        freeCompilerArgs += "-Xuse-experimental=kotlin.time.ExperimentalTime"
+    }
 }
 
 dependencies {
@@ -32,6 +36,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
     implementation 'com.robinhood.spark:spark:1.2.0'
+    implementation 'com.squareup.moshi:moshi:1.8.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'

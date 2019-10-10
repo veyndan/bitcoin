@@ -24,24 +24,50 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/scrubValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textIsSelectable="false"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:text="$7,093.32" />
+
+    <TextView
+        android:id="@+id/scrubTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textIsSelectable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrubValue"
+        tools:text="11/10/2019" />
+
     <HorizontalScrollView
         android:id="@+id/timespansScrollingContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/scrubTime">
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:padding="16dp">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/timespans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:checkedChip="@id/timespan1Year"
                 app:singleLine="true"
                 app:singleSelection="true">
 
@@ -50,42 +76,70 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_30_days" />
+                    android:text="@string/timespan_30_days"
+                    android:textColor="@color/colorAccent"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/timespan60Days"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_60_days" />
+                    android:text="@string/timespan_60_days"
+                    android:textColor="@color/colorAccent"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/timespan180Days"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_180_days" />
+                    android:text="@string/timespan_180_days"
+                    android:textColor="@color/colorAccent"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/timespan1Year"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_1_year" />
+                    android:text="@string/timespan_1_year"
+                    android:textColor="@android:color/white"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/timespan2Years"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_2_years" />
+                    android:text="@string/timespan_2_years"
+                    android:textColor="@color/colorAccent"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipStrokeWidth="1dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/timespanAll"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timespan_all" />
+                    android:text="@string/timespan_all"
+                    android:textColor="@color/colorAccent"
+                    app:chipBackgroundColor="@color/bg_chip_choice"
+                    app:chipCornerRadius="4dp"
+                    app:chipStrokeColor="@color/colorAccent"
+                    app:chipStrokeWidth="1dp" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -97,6 +151,7 @@
         android:id="@+id/sparkView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
