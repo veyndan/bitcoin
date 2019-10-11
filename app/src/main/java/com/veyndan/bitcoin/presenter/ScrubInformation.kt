@@ -1,4 +1,4 @@
-package com.veyndan.bitcoin
+package com.veyndan.bitcoin.presenter
 
 data class ScrubInformation(
     val price: String,

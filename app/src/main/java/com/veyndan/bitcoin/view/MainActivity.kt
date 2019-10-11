@@ -1,10 +1,14 @@
-package com.veyndan.bitcoin
+package com.veyndan.bitcoin.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.checkedChanges
+import com.veyndan.bitcoin.R
 import com.veyndan.bitcoin.data.Datapoint
 import com.veyndan.bitcoin.data.Timespan
+import com.veyndan.bitcoin.presenter.BitcoinChartPresenter
+import com.veyndan.bitcoin.presenter.Presenter
+import com.veyndan.bitcoin.presenter.ScrubInformation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*

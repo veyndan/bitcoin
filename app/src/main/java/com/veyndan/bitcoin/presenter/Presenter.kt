@@ -1,4 +1,4 @@
-package com.veyndan.bitcoin
+package com.veyndan.bitcoin.presenter
 
 import com.veyndan.bitcoin.data.Datapoint
 import com.veyndan.bitcoin.data.Timespan

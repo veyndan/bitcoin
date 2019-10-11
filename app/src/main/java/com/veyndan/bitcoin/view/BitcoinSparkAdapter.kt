@@ -1,4 +1,4 @@
-package com.veyndan.bitcoin
+package com.veyndan.bitcoin.view
 
 import com.robinhood.spark.SparkAdapter
 

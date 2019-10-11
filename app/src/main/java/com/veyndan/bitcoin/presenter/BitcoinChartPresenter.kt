@@ -1,8 +1,9 @@
-package com.veyndan.bitcoin
+package com.veyndan.bitcoin.presenter
 
 import android.content.Context
 import android.text.format.DateFormat
 import androidx.core.os.ConfigurationCompat
+import com.veyndan.bitcoin.view.View
 import com.veyndan.bitcoin.data.BitcoinRepository
 import com.veyndan.bitcoin.data.Datapoint
 import com.veyndan.bitcoin.data.Timespan
