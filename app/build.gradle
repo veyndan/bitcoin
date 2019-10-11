@@ -22,6 +22,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
     kotlinOptions {
         freeCompilerArgs += "-Xuse-experimental=kotlin.time.ExperimentalTime"
     }
@@ -37,14 +41,14 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0'
     implementation 'com.robinhood.spark:spark:1.2.0'
-    implementation 'io.arrow-kt:arrow-core-data:0.10.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     implementation 'net.danlew:android.joda:2.10.3'
 
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'androidx.test.ext:junit:1.1.1'
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'junit:junit:4.12'
-
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
 }
