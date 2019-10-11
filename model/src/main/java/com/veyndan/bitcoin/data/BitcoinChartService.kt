@@ -9,6 +9,6 @@ internal interface BitcoinChartService {
 
     @GET("charts/market-price")
     fun marketPrice(
-        @Query("timespan") timespan: TimespanQuery? = null
+        @Query("timespan") timespan: String? = null
     ): Single<Response<BitcoinChartRaw>>
 }
