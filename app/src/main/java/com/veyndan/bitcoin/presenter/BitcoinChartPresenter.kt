@@ -39,7 +39,7 @@ class BitcoinChartPresenter(
         val format = currencyFormat.apply { currency = datapoint.price.currency }
         val price = format.format(datapoint.price.value)
 
-        val date = DateFormat.getDateFormat(applicationContext).format(datapoint.timestamp)
+        val date = DateFormat.getDateFormat(applicationContext).format(datapoint.timestamp.toDate())
 
         view.displayScrubInformation(ScrubInformation(price, date))
     }

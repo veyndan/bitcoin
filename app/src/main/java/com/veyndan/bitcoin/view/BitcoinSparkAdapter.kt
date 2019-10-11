@@ -7,7 +7,7 @@ class BitcoinSparkAdapter : SparkAdapter() {
     var datapoints = emptyList<com.veyndan.bitcoin.data.Datapoint>()
 
     override fun getX(index: Int): Float {
-        return datapoints[index].timestamp.time.toFloat()
+        return datapoints[index].timestamp.millis.toFloat()
     }
 
     override fun getY(index: Int): Float {
