@@ -72,9 +72,9 @@ class MainActivity : AppCompatActivity(), View {
     companion object {
 
         private val TIMESPAN_ID_TO_TIMESPAN = mapOf(
-            R.id.timespan1Month to Timespan.DAYS_30,
-            R.id.timespan2Months to Timespan.DAYS_60,
-            R.id.timespan6Months to Timespan.DAYS_180,
+            R.id.timespan1Month to Timespan.MONTHS_1,
+            R.id.timespan2Months to Timespan.MONTHS_2,
+            R.id.timespan6Months to Timespan.MONTHS_6,
             R.id.timespan1Year to Timespan.YEARS_1,
             R.id.timespan2Years to Timespan.YEARS_2,
             R.id.timespanAll to Timespan.ALL

@@ -6,9 +6,9 @@ internal object TimespanQueryMapper : Function<Timespan, String> {
 
     override fun apply(timespanQuery: Timespan): String {
         return when (timespanQuery) {
-            Timespan.DAYS_30 -> "30days"
-            Timespan.DAYS_60 -> "60days"
-            Timespan.DAYS_180 -> "180days"
+            Timespan.MONTHS_1 -> "30days"
+            Timespan.MONTHS_2 -> "60days"
+            Timespan.MONTHS_6 -> "180days"
             Timespan.YEARS_1 -> "1year"
             Timespan.YEARS_2 -> "2years"
             Timespan.ALL -> "all"
