@@ -5,36 +5,11 @@ import android.text.format.DateFormat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.ConfigurationCompat
 import com.jakewharton.rxbinding3.widget.checkedChanges
-import com.squareup.moshi.FromJson
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.ToJson
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.veyndan.bitcoin.data.BitcoinChartService
-import com.veyndan.bitcoin.data.Datapoint
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.veyndan.bitcoin.data.BitcoinRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.NumberFormat
-import java.util.*
-import kotlin.time.seconds
-
-
-object BigDecimalAdapter {
-
-    @FromJson
-    fun fromJson(string: String) = BigDecimal(string)
-
-    @ToJson
-    fun toJson(value: BigDecimal) = value.toString()
-}
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,19 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val moshi = Moshi.Builder()
-            .add(BigDecimalAdapter)
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.blockchain.info/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-
-        val bitcoinChartService = retrofit.create<BitcoinChartService>()
 
         val bitcoinSparkAdapter = BitcoinSparkAdapter()
 
@@ -70,17 +32,24 @@ class MainActivity : AppCompatActivity() {
             R.id.timespanAll to "all"
         )
 
+        timespan1Year.isChecked = true
+
         disposables += timespans.checkedChanges()
-            .flatMapSingle { checkedId ->
-                bitcoinChartService.marketPrice(timespan = chipIdToTimespan[checkedId])
-                    .subscribeOn(Schedulers.io())
+            .flatMapCompletable { checkedId ->
+                val timespan = chipIdToTimespan.getValue(checkedId)
+                BitcoinRepository.fetchBitcoinMarketPriceChart(timespan)
             }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { response ->
-                val body = response.body()!!
-                bitcoinSparkAdapter.datapoints = body.values
+            .subscribe()
+
+        disposables += BitcoinRepository.getAllBitcoinMarketPriceChart()
+            .subscribe { bitcoinCharts ->
+                val timespan = chipIdToTimespan.getValue(timespans.checkedRadioButtonId)
+                val bitcoinChart = bitcoinCharts.getValue(timespan)
+
+                bitcoinSparkAdapter.datapoints = bitcoinChart.datapoints
                 bitcoinSparkAdapter.notifyDataSetChanged()
-                chartTitle.text = body.name
+
+                chartTitle.text = bitcoinChart.name
             }
 
         sparkView.setScrubListener {
@@ -89,16 +58,17 @@ class MainActivity : AppCompatActivity() {
                 if (!scrubInformation.isShown) {
                     information.showNext()
                 }
-                val datapoint = it as Datapoint
+
+                val datapoint = it as com.veyndan.bitcoin.data.Datapoint
+
                 val primaryLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
                 val format = NumberFormat.getCurrencyInstance(primaryLocale).apply {
-                    currency = Currency.getInstance("USD")
+                    currency = datapoint.money.currency
                 }
-                val price = format.format(datapoint.y.setScale(2, RoundingMode.HALF_UP))
+                val price = format.format(datapoint.money.value)
                 scrubValue.text = price
 
-                val date = DateFormat.getDateFormat(applicationContext)
-                    .format(Date(datapoint.x.seconds.toLongMilliseconds()))
+                val date = DateFormat.getDateFormat(applicationContext).format(datapoint.timestamp)
                 scrubTime.text = date
             } else {
                 if (!chartTitle.isShown) {
@@ -106,8 +76,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        timespan1Year.isChecked = true
     }
 
     override fun onDestroy() {

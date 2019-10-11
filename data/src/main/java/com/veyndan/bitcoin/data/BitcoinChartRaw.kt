@@ -2,12 +2,12 @@ package com.veyndan.bitcoin.data
 
 import java.math.BigDecimal
 
-data class BitcoinChart(
+internal data class BitcoinChartRaw(
     val name: String,
-    val values: List<Datapoint>
+    val values: List<DatapointRaw>
 )
 
-data class Datapoint(
+internal data class DatapointRaw(
     val x: Long,
     val y: BigDecimal
 )
