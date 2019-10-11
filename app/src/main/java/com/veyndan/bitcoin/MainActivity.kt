@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.veyndan.bitcoin.data.Datapoint
+import com.veyndan.bitcoin.data.Timespan
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,19 +39,10 @@ class MainActivity : AppCompatActivity(), View {
 
         sparkView.adapter = bitcoinSparkAdapter
 
-        val chipIdToTimespan = mapOf(
-            R.id.timespan1Month to "30days",
-            R.id.timespan2Months to "60days",
-            R.id.timespan6Months to "180days",
-            R.id.timespan1Year to "1year",
-            R.id.timespan2Years to "2years",
-            R.id.timespanAll to "all"
-        )
-
         timespan1Year.isChecked = true
 
         disposables += timespans.checkedChanges()
-            .map { checkedId -> chipIdToTimespan.getValue(checkedId) }
+            .map { checkedId -> TIMESPAN_ID_TO_TIMESPAN.getValue(checkedId) }
             .subscribe { timespan -> presenter.fetchChart(timespan) }
 
         sparkView.setScrubListener {
@@ -75,5 +67,17 @@ class MainActivity : AppCompatActivity(), View {
         disposables.clear()
         presenter.onViewDetached()
         super.onDestroy()
+    }
+
+    companion object {
+
+        private val TIMESPAN_ID_TO_TIMESPAN = mapOf(
+            R.id.timespan1Month to Timespan.DAYS_30,
+            R.id.timespan2Months to Timespan.DAYS_60,
+            R.id.timespan6Months to Timespan.DAYS_180,
+            R.id.timespan1Year to Timespan.YEARS_1,
+            R.id.timespan2Years to Timespan.YEARS_2,
+            R.id.timespanAll to Timespan.ALL
+        )
     }
 }

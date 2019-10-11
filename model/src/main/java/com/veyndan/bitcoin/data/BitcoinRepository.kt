@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 object BitcoinRepository {
 
-    private val store = ConcurrentHashMap<String, BitcoinChart>()
+    private val store = ConcurrentHashMap<Timespan, BitcoinChart>()
 
-    private val subject = PublishSubject.create<Map<String, BitcoinChart>>()
+    private val subject = PublishSubject.create<Map<Timespan, BitcoinChart>>()
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
@@ -43,11 +43,11 @@ object BitcoinRepository {
 
     private val bitcoinChartService = retrofit.create<BitcoinChartService>()
 
-    private fun memory(timespan: String): Maybe<BitcoinChart> =
+    private fun memory(timespan: Timespan): Maybe<BitcoinChart> =
         Maybe.fromCallable { store[timespan] }
 
-    private fun network(timespan: String): Single<BitcoinChart> =
-        bitcoinChartService.marketPrice(timespan)
+    private fun network(timespan: Timespan): Single<BitcoinChart> =
+        bitcoinChartService.marketPrice(TimespanQueryMapper.apply(timespan))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { response -> response.body()!! } // TODO Elegantly handle error
@@ -57,11 +57,11 @@ object BitcoinRepository {
                 subject.onNext(store)
             }
 
-    fun getAllBitcoinMarketPriceChart(): Observable<Map<String, BitcoinChart>> {
+    fun getAllBitcoinMarketPriceChart(): Observable<Map<Timespan, BitcoinChart>> {
         return subject.share()
     }
 
-    fun fetchBitcoinMarketPriceChart(timespan: String): Completable {
+    fun fetchBitcoinMarketPriceChart(timespan: Timespan): Completable {
         return Maybe.concat(memory(timespan), network(timespan).toMaybe())
             .firstOrError()
             .doOnSuccess { subject.onNext(store) }

@@ -5,6 +5,7 @@ import android.text.format.DateFormat
 import androidx.core.os.ConfigurationCompat
 import com.veyndan.bitcoin.data.BitcoinRepository
 import com.veyndan.bitcoin.data.Datapoint
+import com.veyndan.bitcoin.data.Timespan
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import java.text.NumberFormat
@@ -22,7 +23,7 @@ class BitcoinChartPresenter(
 
     private val disposables = CompositeDisposable()
 
-    override fun fetchChart(timespan: String) {
+    override fun fetchChart(timespan: Timespan) {
         disposables += BitcoinRepository.fetchBitcoinMarketPriceChart(timespan)
             .subscribe()
 
