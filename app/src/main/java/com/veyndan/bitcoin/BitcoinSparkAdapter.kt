@@ -1,7 +1,6 @@
 package com.veyndan.bitcoin
 
 import com.robinhood.spark.SparkAdapter
-import com.veyndan.bitcoin.data.Datapoint
 
 class BitcoinSparkAdapter : SparkAdapter() {
 
@@ -12,7 +11,7 @@ class BitcoinSparkAdapter : SparkAdapter() {
     }
 
     override fun getY(index: Int): Float {
-        return datapoints[index].money.value.toFloat()
+        return datapoints[index].price.value.toFloat()
     }
 
     override fun getItem(index: Int): Any {

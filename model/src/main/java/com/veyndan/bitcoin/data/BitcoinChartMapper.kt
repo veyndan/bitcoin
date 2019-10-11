@@ -13,7 +13,7 @@ internal object BitcoinChartMapper : Function<BitcoinChartRaw, BitcoinChart> {
             bitcoinChartRaw.values.map { datapointRaw ->
                 Datapoint(
                     timestamp = Date(datapointRaw.x.seconds.toLongMilliseconds()),
-                    money = Money(
+                    price = Money(
                         datapointRaw.y.setScale(2, RoundingMode.HALF_UP),
                         Currency.getInstance("USD")
                     )

@@ -53,7 +53,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/scrubValue"
+                android:id="@+id/scrubPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -62,7 +62,7 @@
                 tools:text="$7,093.32" />
 
             <TextView
-                android:id="@+id/scrubTime"
+                android:id="@+id/scrubDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -70,7 +70,7 @@
                 android:textIsSelectable="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/scrubValue"
+                app:layout_constraintTop_toBottomOf="@id/scrubPrice"
                 tools:text="11/10/2019" />
 
         </LinearLayout>

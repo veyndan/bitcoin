@@ -10,7 +10,7 @@ data class BitcoinChart(
 
 data class Datapoint(
     val timestamp: Date,
-    val money: Money
+    val price: Money
 )
 
 data class Money(

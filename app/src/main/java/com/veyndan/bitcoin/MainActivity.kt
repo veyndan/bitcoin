@@ -1,17 +1,32 @@
 package com.veyndan.bitcoin
 
 import android.os.Bundle
-import android.text.format.DateFormat
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.ConfigurationCompat
 import com.jakewharton.rxbinding3.widget.checkedChanges
-import com.veyndan.bitcoin.data.BitcoinRepository
+import com.veyndan.bitcoin.data.Datapoint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.activity_main.*
-import java.text.NumberFormat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View {
+
+    private lateinit var presenter: Presenter
+
+    private val bitcoinSparkAdapter = BitcoinSparkAdapter()
+
+    override fun updateChartName(chartName: String) {
+        chartTitle.text = chartName
+    }
+
+    override fun updateChart(datapoints: List<Datapoint>) {
+        bitcoinSparkAdapter.datapoints = datapoints
+        bitcoinSparkAdapter.notifyDataSetChanged()
+    }
+
+    override fun displayScrubInformation(scrubInformation: ScrubInformation) {
+        scrubPrice.text = scrubInformation.price
+        scrubDate.text = scrubInformation.date
+    }
 
     private val disposables = CompositeDisposable()
 
@@ -19,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val bitcoinSparkAdapter = BitcoinSparkAdapter()
+        presenter = BitcoinChartPresenter(applicationContext, this)
 
         sparkView.adapter = bitcoinSparkAdapter
 
@@ -35,41 +50,19 @@ class MainActivity : AppCompatActivity() {
         timespan1Year.isChecked = true
 
         disposables += timespans.checkedChanges()
-            .flatMapCompletable { checkedId ->
-                val timespan = chipIdToTimespan.getValue(checkedId)
-                BitcoinRepository.fetchBitcoinMarketPriceChart(timespan)
-            }
-            .subscribe()
-
-        disposables += BitcoinRepository.getAllBitcoinMarketPriceChart()
-            .subscribe { bitcoinCharts ->
-                val timespan = chipIdToTimespan.getValue(timespans.checkedRadioButtonId)
-                val bitcoinChart = bitcoinCharts.getValue(timespan)
-
-                bitcoinSparkAdapter.datapoints = bitcoinChart.datapoints
-                bitcoinSparkAdapter.notifyDataSetChanged()
-
-                chartTitle.text = bitcoinChart.name
-            }
+            .map { checkedId -> chipIdToTimespan.getValue(checkedId) }
+            .subscribe { timespan -> presenter.fetchChart(timespan) }
 
         sparkView.setScrubListener {
+            val datapoint = it as Datapoint?
+
             // When no longer scrubbing, null is passed
-            if (it != null) {
+            if (datapoint != null) {
                 if (!scrubInformation.isShown) {
                     information.showNext()
                 }
 
-                val datapoint = it as com.veyndan.bitcoin.data.Datapoint
-
-                val primaryLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
-                val format = NumberFormat.getCurrencyInstance(primaryLocale).apply {
-                    currency = datapoint.money.currency
-                }
-                val price = format.format(datapoint.money.value)
-                scrubValue.text = price
-
-                val date = DateFormat.getDateFormat(applicationContext).format(datapoint.timestamp)
-                scrubTime.text = date
+                presenter.fetchScrubInformation(datapoint)
             } else {
                 if (!chartTitle.isShown) {
                     information.showNext()
@@ -80,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         disposables.clear()
+        presenter.onViewDetached()
         super.onDestroy()
     }
 }
