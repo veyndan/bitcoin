@@ -25,9 +25,7 @@ class BitcoinChartPresenter(
 
     override fun fetchChart(timespan: Timespan) {
         disposables += BitcoinRepository.fetchBitcoinMarketPriceChart(timespan)
-            .subscribe()
-
-        disposables += BitcoinRepository.getAllBitcoinMarketPriceChart()
+            .andThen(BitcoinRepository.getAllBitcoinMarketPriceChart())
             .map { bitcoinCharts -> bitcoinCharts.getValue(timespan) }
             .firstOrError()
             .subscribe { bitcoinChart ->

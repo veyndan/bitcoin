@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -21,7 +21,7 @@ object BitcoinRepository {
 
     private val store = ConcurrentHashMap<Timespan, BitcoinChart>()
 
-    private val subject = PublishSubject.create<Map<Timespan, BitcoinChart>>()
+    private val subject = BehaviorSubject.create<Map<Timespan, BitcoinChart>>()
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
